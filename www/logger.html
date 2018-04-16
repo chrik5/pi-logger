@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>websocketd logger</title>
+    <style>
+      #rawdata {
+        font: bold 25px arial;
+        margin: auto;
+        padding: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="rawdata"> 
+    <script>
+      var ws = new WebSocket("ws://" + window.location.host);
+      ws.onopen = function() {
+        document.body.style.backgroundColor = '#cfc';
+      };
+      ws.onclose = function() {
+        document.body.style.backgroundColor = null;
+      };
+      ws.onmessage = function(event) {
+        var data = event.data.split(",");
+	document.getElementById('rawdata').innerHTML  = "GPS: " 
+        + data.slice(1,3) 
+        + "<br>" 
+        + "<br>" 
+        + " Roll(deg), Pitch(deg), Yaw(deg)" 
+        + "<br>" +  data.slice(6,9);
+      };
+    </script>
+   </div>
+   
+   <style>
+      #date {
+        font: bold 25px arial;
+        margin: auto;
+        padding: 10px;
+        text-align: center;
+      }
+    </style>
+
+   <div id="date"> 
+    <script>
+      function time(s) {
+        return new Date(s * 1e3).toISOString().slice(-24, -5);
+        }   
+
+      var ws = new WebSocket("ws://" + window.location.host);
+      ws.onopen = function() {
+        document.body.style.backgroundColor = '#cfc';
+      };
+      ws.onclose = function() {
+        document.body.style.backgroundColor = null;
+      };
+      ws.onmessage = function(event) {
+        var data = event.data.split(",");
+        document.getElementById('date').textContent = "time: " + time(data[0]);
+      };
+    </script>
+    </div>
+ 
+  </body>
+</html>
